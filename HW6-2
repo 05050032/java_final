@@ -1,0 +1,143 @@
+import java.awt.*;
+import java.awt.event.*;
+
+public class PopupMenuDemo extends java.awt.Frame implements ActionListener, ItemListener {
+
+  PopupMenu popupmenu ,popupmenu2;
+
+  String menuitemlabel[]={
+    "A", "B", "-", "C"};
+  
+  String cbmenuitemlabel[]={"D", "E", "F"};
+  
+  MenuItem menuitem[] = new MenuItem[6];
+  CheckboxMenuItem checkboxmenuitem[] = new CheckboxMenuItem[3];
+
+  MenuItem menuitemforlabel;
+  Label label,label2;
+  
+  public static void main(String args[]){
+    new PopupMenuDemo();
+  }
+  
+  public PopupMenuDemo() {
+    super("PopupMenu Demo");
+
+	label2 = new Label("Test");
+	add(label2,BorderLayout.NORTH);
+	label2.addMouseListener(new MouseAdapter() {
+      public void mousePressed(MouseEvent e) {
+        showPopmenu2(e);
+      }
+    });
+	
+	popupmenu2 =new PopupMenu("popup menu");
+	menuitemforlabel=new MenuItem("CCC");
+	menuitemforlabel.addActionListener(this);
+	popupmenu2.add(menuitemforlabel);
+	add(popupmenu2);
+	
+	
+    label = new Label();
+    add(label, BorderLayout.SOUTH);
+
+    popupmenu = new PopupMenu("popup menu");
+
+    for(int i=0; i<menuitemlabel.length; i++){
+      if (i==3) { 
+        Menu submenu = new Menu(menuitemlabel[i]);
+        submenu.setFont(new Font("dialog", Font.PLAIN, 11));
+        
+        for (int j=0; j<cbmenuitemlabel.length; j++){
+          checkboxmenuitem[j] = new CheckboxMenuItem(cbmenuitemlabel[j]);
+          
+          if (j==0) 
+            checkboxmenuitem[j].setState(true);
+          
+          checkboxmenuitem[j].setFont(new Font("dialog", Font.PLAIN, 11));
+
+          checkboxmenuitem[j].addItemListener(this);
+    
+          submenu.add(checkboxmenuitem[j]);
+        }
+    
+        popupmenu.add(submenu);
+      }
+      else if (menuitemlabel[i].equals("-")) {
+        popupmenu.addSeparator();
+      }
+      else {
+        menuitem[i] = new MenuItem(menuitemlabel[i]);
+
+        menuitem[i].setFont(new Font("dialog", Font.PLAIN, 11));
+
+        menuitem[i].addActionListener(this);
+
+        popupmenu.add(menuitem[i]);
+      }          
+    }
+
+    add(popupmenu);
+
+    this.setSize(250, 250);
+
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    Dimension frameSize = this.getSize();
+
+    if (frameSize.height > screenSize.height)
+      frameSize.height = screenSize.height;
+
+    if (frameSize.width > screenSize.width)
+      frameSize.width = screenSize.width;
+
+    this.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
+
+    this.setVisible(true);
+
+    this.addMouseListener(new MouseAdapter() {
+      public void mousePressed(MouseEvent e) {
+        showPopmenu(e);
+      }
+    });
+    
+    this.addWindowListener(new WindowAdapter() {
+      public void windowClosing(WindowEvent e) {
+        System.exit(0);
+      }
+    });
+  }
+  
+  public void showPopmenu(MouseEvent e) {
+    if (e.getButton() == MouseEvent.BUTTON3) 
+      popupmenu.show(this, e.getX(), e.getY());
+  }
+  public void showPopmenu2(MouseEvent e) {
+    if (e.getButton() == MouseEvent.BUTTON3) 
+      popupmenu2.show(this, e.getX(), e.getY());
+  }
+
+  public void actionPerformed(ActionEvent e) {
+    MenuItem menuitem = (MenuItem)e.getSource();
+
+    if (menuitem.getLabel().equals("Exit")) { 
+      System.exit(0);
+    }
+    else {
+      label.setText("Select "  + menuitem.getLabel() + " Menu Item.");
+    }
+  }
+
+  public void itemStateChanged(ItemEvent e) {
+    CheckboxMenuItem cbmi = (CheckboxMenuItem)(e.getItemSelectable());
+    
+    for (int i=0; i < checkboxmenuitem.length; i++) {
+      if(cbmi == checkboxmenuitem[i]) {
+        checkboxmenuitem[i].setState(true);
+
+        label.setText("Select " + checkboxmenuitem[i].getLabel() + " Checkbox Menu Item.");
+      }
+      else
+        checkboxmenuitem[i].setState(false);
+    }
+  }
+}
