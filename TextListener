@@ -1,0 +1,106 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.io.PrintStream;
+
+public class TextFieldEventDemo extends Frame
+    implements ActionListener, KeyListener, MouseListener, MouseMotionListener, TextListener
+{
+
+    public static void main(String args[])
+    {
+        new TextFieldEventDemo();
+    }
+
+    public TextFieldEventDemo()
+    {
+        super("TextField Event Demo");
+        setLayout(new FlowLayout());
+        textfield = new TextField();
+        textfield.setText("TextField 1");
+        textfield.setColumns(10);
+        textfield.setBackground(Color.PINK);
+        textfield.setForeground(Color.CYAN);
+        textfield.selectAll();
+        textfield.addActionListener(this);
+        textfield.addKeyListener(this);
+        textfield.addMouseListener(this);
+        textfield.addMouseMotionListener(this);
+        textfield.addTextListener(this);
+        add(textfield);
+        setSize(200, 100);
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension dimension1 = getSize();
+        if(dimension1.height > dimension.height)
+            dimension1.height = dimension.height;
+        if(dimension1.width > dimension.width)
+            dimension1.width = dimension.width;
+        setLocation((dimension.width - dimension1.width) / 2, (dimension.height - dimension1.height) / 2);
+        setVisible(true);
+        addWindowListener(new WindowAdapter() {
+        }
+);
+    }
+
+    public void actionPerformed(ActionEvent actionevent)
+    {
+        if(actionevent.getSource().equals(textfield))
+            System.out.println("文字欄上按ENTER");
+    }
+
+    public void keyPressed(KeyEvent keyevent)
+    {
+        System.out.println((new StringBuilder()).append("Key Pressed: ").append(keyevent.getKeyCode()).toString());
+    }
+
+    public void keyReleased(KeyEvent keyevent)
+    {
+        System.out.println((new StringBuilder()).append("Char: ").append(keyevent.getKeyChar()).toString());
+    }
+
+    public void keyTyped(KeyEvent keyevent)
+    {
+    }
+
+    public void mouseClicked(MouseEvent mouseevent)
+    {
+        System.out.println((new StringBuilder()).append("按下滑鼠").append(mouseevent.getButton()).append("  X: ").append(mouseevent.getX()).append(", Y: ").append(mouseevent.getY()).toString());
+    }
+
+    public void mouseEntered(MouseEvent mouseevent)
+    {
+        System.out.println((new StringBuilder()).append("滑鼠進入物件  X: ").append(mouseevent.getX()).append(", Y: ").append(mouseevent.getY()).toString());
+    }
+
+    public void mouseExited(MouseEvent mouseevent)
+    {
+        System.out.println((new StringBuilder()).append("滑鼠離開物件  X: ").append(mouseevent.getX()).append(", Y: ").append(mouseevent.getY()).toString());
+    }
+
+    public void mousePressed(MouseEvent mouseevent)
+    {
+        System.out.println((new StringBuilder()).append("按住滑鼠 ").append(mouseevent.getButton()).append("  X: ").append(mouseevent.getX()).append(", Y: ").append(mouseevent.getY()).toString());
+    }
+
+    public void mouseReleased(MouseEvent mouseevent)
+    {
+        System.out.println((new StringBuilder()).append("放開滑鼠  X: ").append(mouseevent.getX()).append(", Y: ").append(mouseevent.getY()).toString());
+    }
+
+    public void mouseDragged(MouseEvent mouseevent)
+    {
+        System.out.println((new StringBuilder()).append("按住滑鼠移動  X: ").append(mouseevent.getX()).append(", Y: ").append(mouseevent.getY()).toString());
+    }
+
+    public void mouseMoved(MouseEvent mouseevent)
+    {
+        System.out.println((new StringBuilder()).append("物件上移動滑鼠  X: ").append(mouseevent.getX()).append(", Y: ").append(mouseevent.getY()).append(", ID: ").append(mouseevent.getID()).toString());
+    }
+
+    public void textValueChanged(TextEvent textevent)
+    {
+        if(textevent.getID() == 900)
+            System.out.println("文字欄位內容改變");
+    }
+
+    TextField textfield;
+}
